@@ -6,6 +6,8 @@ Sign up or log in to your GitHub account at https://github.com.
 Click the "+" icon in the upper-right corner and select "New repository."
 Choose a repository name (e.g., "python-sample"), provide a short description, and select the desired visibility (public or private).
 Initialize the repository with a README file and choose a license if desired, then click "Create repository."
+Optionally you can also create a test file and commit it
+
 Step 2: Clone the repository
 Clone the repository to your local machine to start working with the code. Open your terminal or command prompt and run:
 ```
@@ -16,9 +18,10 @@ Step 3: Create a new branch for the Python script
 Create a new branch to work on the Python script without affecting the main branch. Run:
 ```
 git checkout -b script-feature
+git branch
 ```
 Step 4: Add the Python script
-Create a new Python file named hello.py in your repository folder with the following content:
+Create a new Python file named ```hello.py``` in your repository folder with the following content:
 ```
 def hello(name):
     return f"Hello, {name}!"
@@ -31,13 +34,17 @@ Step 5: Commit the changes
 Stage and commit the changes to the script-feature branch:
 ```
 git add hello.py
+git config --global user.email "username@example.com"
+git config --global user.name "name"
 git commit -m "Add hello.py script"
+git status
 ```
 Step 6: Push the changes
 Push the changes to the remote repository:
 ```
 git push origin script-feature
 ```
+give the username and password token
 Step 7: Create a pull request
 
 Navigate to your "python-sample" repository on GitHub.
