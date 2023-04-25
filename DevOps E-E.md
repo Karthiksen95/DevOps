@@ -219,25 +219,26 @@ cd ~
 mkdir ansible && cd ansible
 ```
 ### Download the playbook which will deploy packages into the servers.
-wget https://martuj.s3.ap-south-1.amazonaws.com/DevOpsSetup.yml
-
-# Now, run the above playbook to deploy the packages
+```
+wget https://devops-e-e.s3.ap-south-1.amazonaws.com/DevOpsSetup.yml
+```
+### Now, run the above playbook to deploy the packages
+```
 ansible-playbook DevOpsSetup.yml
+```
+### At the end of this step, the docker-server and jenkins-server will be ready for the 
+### Devops labs
 
-# At the end of this step, the docker-server and jenkins-server will be ready for the 
-# Devops labs
-
-# Check if Jenkins landing page is appearing: 
+### Check if Jenkins landing page is appearing: 
 http://44.202.164.153:8080/ # Use your respective ip address
 
-# Check if docker is working
+### Check if docker is working
 http://34.203.249.54:4243/version # Use your respective ip address
-# http://44.208.26.120:4243/version
+http://44.208.26.120:4243/version
 
 
-#####################
-Lab 2: Git operations
-#####################
+## Lab 2: Git operations
+
 
 Crteate the github repository based on the method shown in the course document
 Create an empty repository in your github account. Name = hello-world
@@ -245,95 +246,117 @@ Create an empty repository in your github account. Name = hello-world
 After that, lets operate in local Git repository
 
 
-Initializing the local git repository and committing changes
-============================================================
-# On the CICD anchor EC2, do the below:
-cd ~/
-# Check GIT version. 
-git --version
-# If it does not exist, then you can install with below command. Else no need to execute below 
-# line:  sudo apt install git -y
+### Initializing the local git repository and committing changes
 
-# Download the Java code we are going to use in the CICD pipeline
+On the CICD anchor EC2, do the below:
+```
+cd ~/
+```
+Check GIT version. 
+```
+git --version
+```
+If it does not exist, then you can install with below command. Else no need to execute below line:  
+```
+sudo apt install git -y
+```
+Download the Java code we are going to use in the CICD pipeline
+```
 wget files.cloudthat.training/devops/devops-essentials/hello-world-master.zip
+```
+```
 unzip hello-world-master.zip -d hello-world-master
+```
+```
 ls
 rm hello-world-master.zip
 cd hello-world-master
 ls
-
+```
+```
 git init .
-
-# Check the email and user name configured.
+```
+Check the email and user name configured.
+```
 git config user.email
 git config user.name
-
-# If you need to change it, you can use below:
+```
+If you need to change it, you can use below:
+```
 git config --global user.email "< Add your email >"
 git config --global user.name "< Add your Name >"
-
+```
+```
 git status
 git add .
 git status
-
+```
+```
 git log
 git commit -m "This is the first commit"
 git log
 git status
-
+```
 git remote add origin < Replace your Repository URL > 
-# Ex: git remote add origin https://github.com/martuj/hello-world.git
-
+```
+Ex: git remote add origin https://github.com/karthiksen/hello-world.git
+```
 git remote show origin
-
+```
 
 
 Task 3: Pushing the Code into your Remote GitHub Repository  
 ===========================================================
-# To push code to Github, You need to generate a Personal Access Token (PAT) in github.
-# Go to your Github homepage. Click on settings in right side top menu. Click on Developer settings on 
-# left side menu bottom. Click on Personal Access Token on left side menu. Click on Generate New Token
-# Under 'Select Scopes' select all items. Click on 'generate token'. Copy the token
+To push code to Github, You need to generate a Personal Access Token (PAT) in github.
+Go to your Github homepage. Click on settings in right side top menu. Click on Developer settings on 
+left side menu bottom. Click on Personal Access Token on left side menu. Click on Generate New Token
+Under 'Select Scopes' select all items. Click on 'generate token'. Copy the token
 
 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
-
+```
 git push origin master 
-# when it asks for password, enter the PAT Token
+```
+when it asks for password, enter the PAT Token
 Token: <enter your PAT> 
 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 # Use your respective PAT
-# When you enter the token, the cursor does not move. It's the expected behavior
+When you enter the token, the cursor does not move. It's the expected behavior
  
 
 Task 4: Creating a Git Branch and Pushing into the Remote Repository  
 ====================================================================
+```
 git branch dev
 git branch
 git checkout dev
 git branch
-
+```
+```
 vi index.html
-
-# Press INSERT and add the below content
-
+```
+Press INSERT and add the below content
+```
 <html>
 <body>
 <h1> Hi There! This file is added in dev branch </h1>
 </body>
 </html>
-
-# Save vi using ESCAPE + :wq!
-
+```
+Save vi using ESCAPE + :wq!
+```
 git status
 git add index.html
 git status
-
+```
+```
 git commit -m "adding new file index.html in new branch dev"
 git log
-
+```
+```
 git push origin dev
+```
 when it asks for password, enter PAT Token
 Token: <your PAT>
-
+```
 git branch
 git branch prod
 git branch
@@ -341,48 +364,47 @@ git checkout prod
 git branch
 git merge dev
 git push origin prod
-
+```
 Token: <PAT>
-
+```
 git checkout master
 git merge prod
 git push origin master
+```
 
 
 
-##################################################################################
-After this, you have to complete Jenkins setup and Docker setup. You can refer to 
+### After this, you have to complete Jenkins setup and Docker setup. You can refer to 
 the course document which gives screenshots 
-##################################################################################
 
-###############################
-Lab 3: Configure Jenkins
-###############################
 
-# Copy private key to Jenkins server so that we can SSH into docker server from jenkins server
+## Lab 3: Configure Jenkins
 
+
+Copy private key to Jenkins server so that we can SSH into docker server from jenkins server
+```
 ansible jenkins-server -m copy -a "src=/home/ubuntu/.ssh/id_rsa dest=/home/ubuntu/.ssh/id_rsa" -b
-
-# SSH into the Jenkins server and get the initial password for Jenkins
+```
+SSH into the Jenkins server and get the initial password for Jenkins
+```
 ssh ubuntu@3.93.145.99
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
-
+```
 afbe8d33e25b4b908c0b9f91546f09e6
 
-# Now, go to the browser and enter Jenkins URL
+Now, go to the browser and enter Jenkins URL
 http://3.93.145.99:8080/
 http://54.227.66.155:8080/
 
-# Under Unlock Jenkins, enter the above Initial password. Continue.
+Under Unlock Jenkins, enter the above Initial password. Continue.
 Click on Install suggested Plugins on Customize Jenkins page.
 
-# Once the plugins are installed, it gives you the page where you can create new admin user id 
-# and password. 
+Once the plugins are installed, it gives you the page where you can create new admin user id and password. 
 
 Enter user id and password. Save & Continue. 
-# To keep things easier for this training, you may use the same user
-# id and password which you used for Github. Needless to say, in real life, you must keep the user 
-# ids and passwords separate.
+To keep things easier for this training, you may use the same user
+id and password which you used for Github. Needless to say, in real life, you must keep the user 
+ids and passwords separate.
 
 In next step, on Instance Configuration Page, verify your Jenkins Public IP and Port Number then 
 click on Save and Finish
