@@ -29,26 +29,29 @@ wget https://releases.hashicorp.com/terraform/1.2.8/terraform_1.2.8_linux_amd64.
 ```
 unzip terraform_1.2.8_linux_amd64.zip
 ```
-
+```
 ls
 sudo mv terraform /usr/local/bin
 ls
 terraform -v
 rm terraform_1.1.5_linux_amd64.zip
+```
 
-
-Task 2: Install AWS CLI and Ansible
-===================================
+### Task 2: Install AWS CLI and Ansible
+```
 sudo apt-get install python3-pip -y
 sudo pip3 install awscli boto boto3 ansible
-
+```
+```
 aws configure
+```
+example: 
 Access Key ID:
 AKIAXMWJXSSHRD27T6SC
 Secret Access Key:
 H4Vh0U5oenKfmJ/+FEUcbaGbDjcnGAmZvQLX7zTT
 
-# If you need to create new credentials, Follow below steps
+### If you need to create new credentials, Follow below steps
 Go to aws console. On top right corner, click on your name or aws profile id. 
 when the menu opens, click on Security Credentials
 Under AWS IAM Credntials, click on Create access key. If you already have 2 active keys, 
@@ -56,35 +59,40 @@ you can deactivate and delete the older one so that you can create a new key
 
 Complete aws configure step
 
-# do smoke test to check if your credentials are valid
+### do smoke test to check if your credentials are valid
+```
 aws s3 ls
-
-# Create hosts inventory file with the necessary permissions
+```
+### Create hosts inventory file with the necessary permissions
+ ```
  sudo mkdir /etc/ansible && sudo touch /etc/ansible/hosts
  sudo chmod 766 /etc/ansible/hosts
+```
 
+### Task 3: Use terraform to launch 2 servers. 
 
-Task 3: Use terraform to launch 2 servers. 
-==========================================
-# We need 2 additional servers docker-server and jenkins-server
-# For git-ws, we will use the anchor EC2 (from where we are operating now) 
-# You can use t2.micro for Docker/Jenkins
+We need 2 additional servers docker-server and jenkins-server
+For git-ws, we will use the anchor EC2 (from where we are operating now) 
+You can use t2.micro for Docker/Jenkins
 
-# Create the terraform directory and set up the config files in it
+### Create the terraform directory and set up the config files in it
+```
 mkdir devops-labs && cd devops-labs
-
-# As a first step, create a key using ssh-keygen.
+```
+As a first step, create a key using ssh-keygen.
+```
 ssh-keygen -t rsa -b 2048 
+```
+This will create id_rsa and id_rsa.pub in /home/ubuntu/.ssh/
+Keep the path as /home/ubuntu/.ssh/id_rsa; don't set up any passphrase
+Basically just hit 'Enter' key for the 3 questions it asks
 
-# This will create id_rsa and id_rsa.pub in /home/ubuntu/.ssh/
-# Keep the path as /home/ubuntu/.ssh/id_rsa; don't set up any passphrase
-# Basically just hit 'Enter' key for the 3 questions it asks
-
-# Now prepare the terraform config files.
+### Now prepare the terraform config files.
+```
 vi DevOpsServers.tf
-
-# Type the below code into DevOpsServers.tf
-
+```
+Type the below code into DevOpsServers.tf
+```
 provider "aws" {
   region = var.region
 }
@@ -116,15 +124,15 @@ resource "aws_instance" "my-machine" {
     EOT
   }
 }
+```
 
 
-
-# Now, create the variables file with all variables to be used in the main config file.
-
+Now, create the variables file with all variables to be used in the main config file.
+```
 vi variables.tf
-
-# Add following contents into variables.tf. Please update the keyname and sg_id below.
-
+```
+Add following contents into variables.tf. Please update the keyname and sg_id below.
+```
 variable "region" {
     default = "us-east-1"
 }
@@ -158,19 +166,29 @@ variable "my-servers" {
   type    = list(string)
   default = ["jenkins-server", "docker-server"]
 }
+```
+### Edit the security group id and keyname in variables.tf
 
-# Edit the security group id and keyname in variables.tf
-
-# Now, execute the terraform config files to launch the servers
-
+### Now, execute the terraform config files to launch the servers
+```
 terraform init
+```
+```
 terraform fmt
+```
+```
 terraform validate
+```
+```
 terraform plan
+```
+```
 terraform apply -auto-approve
-
-# After the terraform code is executed, check hosts inventory file and ensure below output (sample)
+```
+### After the terraform code is executed, check hosts inventory file and ensure below output (sample)
+```
 sudo vi /etc/ansible/hosts
+```
 It will show ip addresses of jenkins server and docker server as below.
 
 [jenkins-server]
@@ -179,23 +197,29 @@ It will show ip addresses of jenkins server and docker server as below.
 34.203.249.54
 
 
-# Now ssh into docker-server & jenkins-server and check they are accessible
+### Now ssh into docker-server & jenkins-server and check they are accessible
+```
 ssh ubuntu@<Jenkins ip address>
-# Set the hostname
+```
+### Set the hostname
+```
 sudo hostnamectl set-hostname Jenkins
-
+```
+```
 ssh ubuntu@<Docker ip address>  
+```
+```
 sudo hostnamectl set-hostname Docker
+```
 
 
-
-Task 4: Use Ansible to deploy respective packages into each of the 3 servers 
-============================================================================
+### Task 4: Use Ansible to deploy respective packages into each of the 3 servers 
+```
 cd ~
 mkdir ansible && cd ansible
-
-# Download the playbook which will deploy packages into the servers.
-wget https://devopstrng.s3.amazonaws.com/DevOpsSetup.yml
+```
+### Download the playbook which will deploy packages into the servers.
+wget https://martuj.s3.ap-south-1.amazonaws.com/DevOpsSetup.yml
 
 # Now, run the above playbook to deploy the packages
 ansible-playbook DevOpsSetup.yml
