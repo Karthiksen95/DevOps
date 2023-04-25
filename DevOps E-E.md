@@ -31,7 +31,7 @@ ls
 sudo mv terraform /usr/local/bin
 ls
 terraform -v
-rm terraform_1.1.5_linux_amd64.zip
+rm terraform_1.2.8_linux_amd64.zip
 ```
 
 ### Task 2: Install AWS CLI and Ansible
@@ -302,8 +302,8 @@ git remote show origin
 ```
 
 
-Task 3: Pushing the Code into your Remote GitHub Repository  
-===========================================================
+### Task 3: Pushing the Code into your Remote GitHub Repository  
+
 To push code to Github, You need to generate a Personal Access Token (PAT) in github.
 Go to your Github homepage. Click on settings in right side top menu. Click on Developer settings on 
 left side menu bottom. Click on Personal Access Token on left side menu. Click on Generate New Token
@@ -319,8 +319,8 @@ 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 # Use your respective PAT
 When you enter the token, the cursor does not move. It's the expected behavior
  
 
-Task 4: Creating a Git Branch and Pushing into the Remote Repository  
-====================================================================
+### Task 4: Creating a Git Branch and Pushing into the Remote Repository  
+
 ```
 git branch dev
 git branch
@@ -405,8 +405,8 @@ ids and passwords separate.
 
 In next step, on Instance Configuration Page, verify your Jenkins Public IP and Port Number then 
 click on Save and Finish
-------------------------------
-# You will be prompted to the Jenkins Home Page
+
+You will be prompted to the Jenkins Home Page
 
 Click on Manage Jenkins > Manage Plugins
 
@@ -439,67 +439,73 @@ GitHub Credentials.
 Keep all the other values as default and select Build Tab and inside Goals and options put a 
 line as a clean package and save the configuration by clicking on Save.
 
-# 'clean package' command clears the target directory and Builds the project and packages the 
-# resulting JAR file into the target directory.
+### 'clean package' command clears the target directory and Builds the project and packages the 
+### resulting JAR file into the target directory.
 
 You will get back to Maven project hello-world click on Build Now for building the .war file 
 for your application
 
-# You can go to Workspace > dist folder to see that the .war file is created there.
-# war file will be created in /var/lib/jenkins/workspace/hello-world/target/
+### You can go to Workspace > dist folder to see that the .war file is created there.
+### war file will be created in /var/lib/jenkins/workspace/hello-world/target/
 
 
-Task 2: Installing and Configuring Tomcat for Deploying our Application on Jenkins server
-=========================================================================================
+## Task 2: Installing and Configuring Tomcat for Deploying our Application on Jenkins server
+
 
 # SSH into Jenkins server. Make sure that you are root user and Install Tomcat web server
 ssh ubuntu@3.87.66.176 # If you are already in Jenkins, this step not needed
-
+```
 sudo apt update
-
+```
+```
 sudo apt install tomcat9 tomcat9-admin -y
-# ss -ltn
-
+ss -ltn
+```
+```
 sudo systemctl enable tomcat9
-
-# Now we need to navigate to server.xml to change the Tomcat port number from 8080 to 9999, 
-# as port number 8080 is already being used by Jenkins website.
+```
+### Now we need to navigate to server.xml to change the Tomcat port number from 8080 to 9999, 
+### as port number 8080 is already being used by Jenkins website.
+```
 sudo vi /etc/tomcat9/server.xml
-#Change 8080 to 9999 in 1 place. (There are 2 other references in comments)
+```
+### Change 8080 to 9999 in 1 place. (There are 2 other references in comments)
 press esc
 :g/8080/s//9999/g  hit enter
 /9999 hit enter to verify
 
 
-#Now restart the system for the changes to take effect
+Now restart the system for the changes to take effect
+```
 sudo service tomcat9 restart
 sudo service tomcat9 status
-
-# Once the Tomcat service restart is successful, go to your web browser and enter Jenkins
-# Server IP address followed by 9999 port, you can check the Tomcat running on port 9999 
-# on the same machine. http://< Your Jenkins Public IP >:9999
+```
+Once the Tomcat service restart is successful, go to your web browser and enter Jenkins
+Server IP address followed by 9999 port, you can check the Tomcat running on port 9999 
+on the same machine. http://< Your Jenkins Public IP >:9999
 http://184.72.112.155:9999
  
-# We need to copy the .war file created in the previous Jenkins build from Jenkins workspace 
-# to tomcat webapps directory to serve the web content
-
+We need to copy the .war file created in the previous Jenkins build from Jenkins workspace 
+to tomcat webapps directory to serve the web content
+```
 sudo cp -R /var/lib/jenkins/workspace/hello-world/target/hello-world-war-1.0.0.war /var/lib/tomcat9/webapps
-
-# Once this is done, go to your browser and enter Jenkins Server Public IP address followed 
-# by port 9999 and path Ã¢â‚¬Ëœhello-world-war-1.0.0Ã¢â‚¬â„¢ and you can see tomcat is now serving your web page
-# (URL:  http://< Your Jenkins Public IP >:9999/hello-world-war-1.0.0/)
+```
+Once this is done, go to your browser and enter Jenkins Server Public IP address followed 
+by port 9999 and path Ã¢â‚¬Ëœhello-world-war-1.0.0Ã¢â‚¬â„¢ and you can see tomcat is now serving your web page
+(URL:  http://< Your Jenkins Public IP >:9999/hello-world-war-1.0.0/)
 
 http://184.72.112.155:9999/hello-world-war-1.0.0/
 
-# Stop tomcat9 and remove it. Else it will slow down Jenkins
+Stop tomcat9 and remove it. Else it will slow down Jenkins
+```
 sudo service tomcat9 stop
 sudo apt remove tomcat9 -y
+```
 
 
 
-#####################################################################
 Lab 4: Using GitWebHook to build your code automatically using Jenkins
-#####################################################################
+
 
 Task 1:Configure Git WebHook in Jenkins
 =======================================
