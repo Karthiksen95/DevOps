@@ -14,11 +14,8 @@ After the EC2 server is up & running, SSH into the machine and do the below:
 sudo hostnamectl set-hostname CICDLab
 ```
 ```
-exit
+bash
 ```
-SSH into the machine again. New hostname will appear now
-or 
-type bash 
 ```
 sudo apt update
 sudo apt install wget unzip -y
