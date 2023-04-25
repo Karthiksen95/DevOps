@@ -453,7 +453,7 @@ for your application
 ## Task 2: Installing and Configuring Tomcat for Deploying our Application on Jenkins server
 
 
-# SSH into Jenkins server. Make sure that you are root user and Install Tomcat web server
+SSH into Jenkins server. Make sure that you are root user and Install Tomcat web server
 ssh ubuntu@3.87.66.176 # If you are already in Jenkins, this step not needed
 ```
 sudo apt update
@@ -505,11 +505,11 @@ sudo apt remove tomcat9 -y
 
 
 
-Lab 4: Using GitWebHook to build your code automatically using Jenkins
+### Lab 4: Using GitWebHook to build your code automatically using Jenkins
 
 
-Task 1:Configure Git WebHook in Jenkins
-=======================================
+### Task 1:Configure Git WebHook in Jenkins
+
 Go to Jenkins webpage. Manage Jenkins > Manage Plugins
 
 Go to Available Tab, Search for GitHub Integration. Click on the GitHub Integration Plugin 
@@ -531,8 +531,8 @@ Content type: application/json
 Click Add webhook
 
 
-Task 2: Verify the working of WebHook by editing the Source Code
-================================================================
+### Task 2: Verify the working of WebHook by editing the Source Code
+
 Now change your source code in the hello-world repository by editing hello.txt file.
 Make a minor change and commit
 
@@ -543,9 +543,9 @@ Observe successful load build in Jenkins page.
 
 
 
-###############################################################################################
-Lab 5: Add Docker Machine as Jenkins Slave, build and deploy code in Docker Host as a container
-###############################################################################################
+
+### Lab 5: Add Docker Machine as Jenkins Slave, build and deploy code in Docker Host as a container
+
 
 Go to Jenkins' home page and click on the Manage Jenkins option on the left. 
 Click on Manage Nodes and Clouds option
@@ -565,8 +565,10 @@ as ubuntu, select Enter directly proceed to a private key value below. Click on 
 once it is done.
 
 You can get the private key as below: Goto your CICD anchor EC2 machine.  
+```
 cd ~/.ssh
 cat id_rsa
+```
 Copy the entire content including first line and last line. Paste it into the space provided for 
 private key
 
@@ -575,12 +577,14 @@ host file Verification Strategy.
 
 SSH into your Docker Host. Perform the below steps to create a Dockerfile 
 in /home/ubuntu directory.
-
+```
 cd ~
+```
+```
 vi Dockerfile
-
-# enter the below:
-
+```
+enter the below:
+```
 # Pull Base Image
 FROM tomcat:8-jre8
 
@@ -589,7 +593,7 @@ MAINTAINER "CloudThat"
 
 # Copy the war file to images tomcat path
 ADD hello-world-war-1.0.0.war /usr/local/tomcat/webapps/
-
+```
 
 Go to your Jenkins Home page, click on drop-down hello-world project, select Configure on the left 
 tab. In General Tab, check Restrict where this project can be run and enter Label Expression as 
@@ -599,15 +603,15 @@ docker-slave
 Go to Post Steps Tab, select Run only if the build succeeds then click on Add post-build step select 
 Execute shell from the drop-down and type the following commands in the shell and Save
 
-# execute shell commands in Jenkins:
-
+execute shell commands in Jenkins:
+```
 cd ~
 cp -f /home/ubuntu/workspace/hello-world/target/hello-world-war-1.0.0.war .
 sudo docker container rm -f yourname-helloworld-container
 sudo docker build -t helloworld-image .
 sudo docker run -d -p 8080:8080 --name yourname-helloworld-container helloworld-image
-
-# Note - you may replace 'yourname' with your actual first name (line 3 and 5).
+```
+### Note - you may replace 'yourname' with your actual first name (line 3 and 5).
 
 
 Now you can build your hello-world project by clicking on Build Now or by making a small change in
@@ -615,22 +619,19 @@ Github files.
 
 Once the loadbuild is successful, to access the tomcat server page, you can use below:
 
-# Use http:// < Your Docker Host Public IP >:8080/hello-world-war-1.0.0/ in your browser to see the website
+### Use http:// < Your Docker Host Public IP >:8080/hello-world-war-1.0.0/ in your browser to see the website
 http://<docker ip address>:8080/hello-world-war-1.0.0/
 http://3.95.192.77:8080/hello-world-war-1.0.0/
 
 
 Clean up the Instances
-=======================
+
 We can now terminate all the 3 instances. 
 
 
-##################################################################################
 
 
-#####################
-Course Feedback
-#####################
+
 
 
 
