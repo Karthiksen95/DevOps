@@ -294,6 +294,7 @@ git commit -m "This is the first commit"
 git log
 git status
 ```
+```
 git remote add origin < Replace your Repository URL > 
 ```
 Ex: git remote add origin https://github.com/karthiksen/hello-world.git
