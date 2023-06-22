@@ -572,8 +572,7 @@ cat id_rsa
 Copy the entire content including first line and last line. Paste it into the space provided for 
 private key
 
-In SSH Credentials, choose newly created ubuntu. Host Key Verification Strategy select Known 
-host file Verification Strategy. 
+In SSH Credentials, choose newly created ubuntu. Host Key Verification Strategy select Non Verification Strategy. 
 
 SSH into your Docker Host. Perform the below steps to create a Dockerfile 
 in /home/ubuntu directory.
